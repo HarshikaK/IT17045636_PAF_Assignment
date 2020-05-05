@@ -100,5 +100,39 @@ public class Patient {
 			}
 			return output;
 		}
+		//update Patient
+		public String updatePatient(String PID, String PatientName, String Email,String Phone, String Password)
+		{
+			String output = "";
+			try
+			{
+				Connection con = connect();
+				if (con == null)
+				{
+					return "Error while connecting to the database for updating.";
+				}
+				// create a prepared statement
+				String query = "UPDATE Patient SET PatientName=?,Email=?,Phone=?,Password=? WHERE PID=?";
+				PreparedStatement preparedStmt = con.prepareStatement(query);
+				// binding values
+				preparedStmt.setString(1, PatientName);
+				preparedStmt.setString(2, Email);
+				preparedStmt.setString(3, Phone);
+				preparedStmt.setString(4, Password);
+				preparedStmt.setInt(5, Integer.parseInt(PID));
+				// execute the statement
+				preparedStmt.execute();
+				con.close();
+				String newPatients = readPatient();
+				output = "{\"status\":\"success\", \"data\": \"" +  newPatients + "\"}";
+			}
+			catch (Exception e)
+			{
+				output = "{\"status\":\"error\", \"data\":\"Error while updating the Patient.\"}";
+				System.err.println(e.getMessage());
+			}
+			return output;
+		}
+		
 
 }
