@@ -133,6 +133,32 @@ public class Patient {
 			}
 			return output;
 		}
-		
+		//delete Patient------------------------
+		public String deletePatient(String PID) {
+			String output = "";
+			try {
+				Connection con = connect();
+				if (con == null) {
+					return "Error while connecting to the database for deleting.";
+				}
+				// create a prepared statement
+				String query = "delete from Patient where PID=?";
+				PreparedStatement preparedStmt = con.prepareStatement(query);
+				// binding values
+				preparedStmt.setInt(1, Integer.parseInt(PID));
+				// execute the statement
+				preparedStmt.execute();
+				con.close();
+				//output = "Deleted successfully";
+				String newPatients = readPatient();
+				output = "{\"status\":\"success\", \"data\": \"" + newPatients + "\"}";
+			} catch (Exception e) {
+				//output = "Error while deleting the Patient,,.";
+				output = "{\"status\":\"error\", \"data\":\"Error while deleting the Patient.\"}";
+				
+				System.err.println(e.getMessage());
+			}
+			return output;
+		}
 
 }
