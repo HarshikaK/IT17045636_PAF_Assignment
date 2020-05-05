@@ -2,6 +2,7 @@ package com;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
@@ -59,6 +60,42 @@ public class Patient {
 			catch (Exception e)
 			{
 				output = "Error while reading the Patient.";
+				System.err.println(e.getMessage());
+			}
+			return output;
+		}
+		//inserting---------------------
+		public String insertPatient(String PatientName, String Email,String Phone, String Password)
+		{
+			String output = "";
+			try
+			{
+				Connection con = connect();
+				if (con == null)
+				{
+					return "Error while connecting to the database for inserting.";
+				}
+				// create a prepared statement
+				String query = " insert into Patient(`PatientName`,`Email`,`Phone`,`Password`)"+ " values (?, ?, ?, ?)";
+				PreparedStatement preparedStmt = con.prepareStatement(query);
+				// binding values
+				
+				preparedStmt.setString(1, PatientName);
+				preparedStmt.setString(2, Email);
+				preparedStmt.setString(3, Phone);
+				preparedStmt.setString(4, Password);
+				// execute the statement
+				preparedStmt.execute();
+				
+				 System.out.print("successfuly inserted");
+				 
+				con.close();
+				String newPatients = readPatient();
+				output = "{\"status\":\"success\", \"data\": \"" + newPatients + "\"}";
+			}
+			catch (Exception e)
+			{
+				output = "{\"status\":\"error\", \"data\":\"Error while inserting the Patient.\"}";
 				System.err.println(e.getMessage());
 			}
 			return output;
