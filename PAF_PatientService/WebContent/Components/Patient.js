@@ -107,21 +107,45 @@ $(document).on(
 		});
 // CLIENTMODEL=========================================================================
 function validatePatientForm() {
-	// CODE
+	// Patient Name
 	if ($("#PatientName").val().trim() == "") {
 		return "Insert PatientName.";
 	}
-	// NAME
+	
+	var letterReg1 = /^[A-Za-z]+$/;
+	var tmpfName =  $("#PatientName").val().trim();
+	if(!tmpfName.match(letterReg1)){
+		return "First Letter must have alphabet charaters only...!";
+	}
+	
+	// Email
 	if ($("#Email").val().trim() == "") {
 		return "Insert Email.";
 	}
+	var emailReg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+	var tmpEmail =  $("#Email").val().trim();
+	if(!tmpEmail.match(emailReg)){
+		return "Insert a valid Email...!";
+	}
 
-	// PRICE-------------------------------
+	// Phone-------------------------------
 	if ($("#Phone").val().trim() == "") {
 		return "Insert Phone.";
 	}
+	var contactReg = /^\d{10}$/;
+	var tmpPhone =  $("#Phone").val().trim();
+	if(!tmpPhone.match(contactReg)){
+		return "Insert a valid Phone Number...!";
+	}
+	//Password---------------------------------
 	if ($("#Password").val().trim() == "") {
 		return "Insert Password.";
+	}
+	
+	var pwdReg = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{4,8}$/;
+	var tmpPwd =  $("#Password").val().trim();
+	if(!tmpPwd.match(pwdReg)){
+		return "Insert a Password 4 to 8 characters which contain at least one numeric digit, one uppercase and one lowercase letter...!";
 	}
 	
 	return true;
